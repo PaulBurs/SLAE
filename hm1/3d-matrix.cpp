@@ -68,6 +68,15 @@ int main(){
 		std::cout << "Что-то пошло не так" << std::endl;
 		return 1;
 	}	
+	
+	std::vector<double> s_test3 = {1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 ,0, 1, 1, 1, 1, 1};
+	int n_test3 = 5;
+	std::vector<double> x_test3 = {1, 0, 1, 0, 1};
+	if (output_x(n_test3, s_test3) != x_test3)
+	{
+		std::cout << "Что-то пошло не так" << std::endl;
+		return 1;
+	}
 
 
 
