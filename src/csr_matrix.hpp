@@ -5,7 +5,7 @@
 #include <map>
 #include <dense_matrix.hpp>
 
-template<typename T>
+template <typename T>
 
 class csr_matrix{
 private:
@@ -55,22 +55,41 @@ public:
 	}*/
 
 
-	csr_matrix(size_t size_x, size_t size_y, const std::map<std::pair<size_t, size_t>, T>& matrix)	{
-		size_x_ = size_x;
-		size_y_ = size_y;
-		std::vector<size_t> tmp_rows;
-		for (auto const& index : matrix)
-		{
-			values_.push_back(index.second);
-			cols_.push_back(index.first.second);
-			tmp_rows.push_back(index.first.second);
-		}
-		for(int x = 0; x < size_x; ++x)
-		{
-			rows_.push_back(rows_[x] + std::count(tmp_rows.begin(), tmp_rows.end(), x));
-		}
+	csr_matrix(size_t size_x, size_t size_y, const std::map<std::pair<size_t, size_t>, T>& matrix) {
+        size_x_ = size_x;
+        size_y_ = size_y;
+        rows_.resize(size_y + 1, 0);
 
-	}
+        for (const auto& elem : matrix) {
+            size_t row = elem.first.second;
+            if (row < size_y) {
+                rows_[row + 1]++;
+            }
+        }
+
+        for (size_t i = 1; i <= size_y; ++i) {
+            rows_[i] += rows_[i - 1];
+        }
+
+        values_.resize(rows_[size_y]);
+        cols_.resize(rows_[size_y]);
+        std::vector<size_t> counters(size_y, 0);
+
+        for (const auto& elem : matrix) {
+            size_t col = elem.first.first;
+            size_t row = elem.first.second;
+            T value = elem.second;
+
+            if (row >= size_y || col >= size_x) continue;
+
+            size_t pos = rows_[row] + counters[row];
+            if (pos >= values_.size()) continue;
+
+            cols_[pos] = col;
+            values_[pos] = value;
+            counters[row]++;
+        }
+    }
 
 
 	T operator() (size_t x, size_t y){
