@@ -58,8 +58,8 @@ int main(){
 		print_x(out_x);
 		std::cout << "Что-то пошло не так" << std::endl;
 		return 1;
-	}	
-		
+	}
+
 	std::vector<double> s_test2 = {0, 1, 1, 0, 1, 1};
 	int n_test2 = 2;
 	std::vector<double> x_test2 = {1, 1};
@@ -67,8 +67,8 @@ int main(){
 	{
 		std::cout << "Что-то пошло не так" << std::endl;
 		return 1;
-	}	
-	
+	}
+
 	std::vector<double> s_test3 = {1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 ,0, 1, 1, 1, 1, 1};
 	int n_test3 = 5;
 	std::vector<double> x_test3 = {1, 0, 1, 0, 1};
@@ -103,22 +103,22 @@ int main(){
 		while (ss >> number) {
 		v.push_back(number);
 	    }
-		
+
 	s.insert(s.end(), v.begin(), v.end());
 	len.push_back(v.size());
-	}    	
+	}
 	int n = len[1];
-	
-	
+
+
 	std::cout << "Запрос принят" << std::endl;
-	
-	
-	
+
+
+
 	if (len[0] != len[2] or len[1] != len[3] or len[0] == len[1] or len[2] == len[3])
 	{
 		std::cout << "Что-то пошло не так" << std::endl;
 		return 1;
-	}		
+	}
 	std::vector<double> v_all(s.size(), 0.0);
 	std::vector<double> v_none(3*n-2, 0.0);
 	if (s == v_all)
@@ -134,13 +134,13 @@ int main(){
 		std::cout << "Решений нет" << std::endl;
 		return 0;
 	}
-	
-	
-	
+
+
+
 	std::vector<double> x = output_x(n, s);
 	print_x(x);
-	
-	
+
+
 	return 0;
 }
 
