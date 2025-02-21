@@ -5,9 +5,8 @@
 #include <random>
 #include <algorithm>
 #include <memory>
-
-#include "dense_matrix.hpp"
-#include "csr_matrix.hpp"
+#include "../include/dense_matrix.hpp"
+#include "../include/csr_matrix.hpp"
 
 using namespace std;
 

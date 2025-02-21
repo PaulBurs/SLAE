@@ -3,25 +3,22 @@
 #include <vector>
 #include <algorithm>
 #include <map>
-#include <dense_matrix.hpp>
+#include "Matrix.hpp"
+#include "dense_matrix.hpp"
 
 template <typename T>
 
-class csr_matrix{
+class csr_matrix : public Matrix{
 private:
-	size_t size_x_;
-	size_t size_y_;
 	std::vector<T> values_;
 	std::vector<size_t> cols_;
 	std::vector<size_t> rows_ = {0};
 public:
-	csr_matrix(const dense_matrix<T>& matrix)	{
-		size_x_ = matrix.get_size_x();
-		size_y_ = matrix.get_size_y();
-		for(int x = 0; x < size_x_; ++x)
+	csr_matrix(const dense_matrix<T>& matrix) : Matrix(get_size_x(), get_size_y())	{
+		for(int x = 0; x < get_size_x(); ++x)
 		{
 			rows_.push_back(rows_[x]);
-			for(int y = 0; y < size_y_; ++y)
+			for(int y = 0; y < get_size_y(); ++y)
 				{
 					if (matrix(x, y) != 0)
 					{
@@ -55,9 +52,7 @@ public:
 	}*/
 
 
-	csr_matrix(size_t size_x, size_t size_y, const std::map<std::pair<size_t, size_t>, T>& matrix) {
-        size_x_ = size_x;
-        size_y_ = size_y;
+	csr_matrix(size_t size_x, size_t size_y, const std::map<std::pair<size_t, size_t>, T>& matrix) : Matrix(size_x, size_y){
         rows_.resize(size_y + 1, 0);
 
         for (const auto& elem : matrix) {
@@ -93,7 +88,7 @@ public:
 
 
 	T operator() (size_t x, size_t y){
-		if (x >= size_x_ || y >= size_y_)
+		if (x >= get_size_x() || y >= get_size_y())
 			throw std::out_of_range("You are invalid: incorrect indexing!\n");
 
 		for(int i = rows_[y]; i < rows_[y+1]; ++i)
@@ -107,7 +102,7 @@ public:
 
 
 	T& operator() (size_t x, size_t y) const{
-		if (x >= size_x_ || y >= size_y_)
+		if (x >= get_size_x() || y >= get_size_y())
 			throw std::out_of_range("You are invalid: incorrect indexing!\n");
 
 		for(int i = rows_[y]; i < rows_[y+1]; ++i)
@@ -119,15 +114,6 @@ public:
 		return 0;
 	}
 
-
-	size_t get_size_x() const{
-	    return size_x_;
-	}
-
-
-	size_t get_size_y() const{
-	    return size_y_;
-	}
 
 
 	std::vector<T> operator*(const std::vector<T>& vec) const{
