@@ -21,7 +21,6 @@ public:
 	}
 
 
-
 	T& operator() (size_t x, size_t y) {
 		if (x >= this->get_size_x() || y >= this->get_size_y())
 			throw std::out_of_range("You are invalid: incorrect indexing!\n");
@@ -41,7 +40,7 @@ public:
         std::vector<T> result(get_size_x(), T(0)); // Инициализация нулями типа T
         for (size_t i = 0; i < this->get_size_x(); ++i) {
             for (size_t j = 0; j < this->get_size_y(); ++j) {
-                result[i] += (*this)(i, j) * vec[j];
+                result[i] += (*this)(i,j) * vec[j];
             }
         }
         return result;
@@ -107,7 +106,7 @@ public:
         }
     }
 
-    dense_matrix<T> t(){
+    dense_matrix<T> t() const{
         std::vector<std::vector<T>> result(this->get_size_x(), std::vector<T>(this->get_size_y()));
 
         for(int x = 0; x < this->get_size_x(); ++x){
@@ -117,7 +116,6 @@ public:
         }
 
         return dense_matrix(this->get_size_x(), this->get_size_y(), result);
-
     }
 
 

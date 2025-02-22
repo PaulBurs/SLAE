@@ -19,7 +19,7 @@ TEST(DecisionQR, CorrectValues) {
     std::vector<double> f = {1.0, -2.0, 0.0};
     std::vector<double> x = {1, -2, -2};
 
-    std::vector<double> my_x = decision_system_with_QR(A.t(), f);
+    std::vector<double> my_x = decision_system_with_QR(A, f);
     for(size_t i = 0; i < 3; ++i)
         EXPECT_NEAR(x[i], my_x[i], EPSILON);
 }
