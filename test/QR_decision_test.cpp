@@ -2,9 +2,8 @@
 #include <vector>
 #include <utility>
 #include <algorithm>
-#include "../include/dense_matrix.hpp"
-#include "../include/algorithm_of_Householder.hpp"
-#include "../include/QR_system_decision.hpp"
+#include "../include/matrix/dense_matrix.hpp"
+#include "../include/system_decision/direct/QR_system_decision.hpp"
 
 const double EPSILON = 1e-8;
 

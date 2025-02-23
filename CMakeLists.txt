@@ -55,6 +55,11 @@ add_executable(QR_decision_test
     test/QR_decision_test.cpp
 )
 
+add_executable(iterations_method_versus
+    test/iter_method_versus.cpp
+)
+
+
 
 target_link_libraries(QR_decomposition_test
     PRIVATE 
@@ -76,6 +81,7 @@ enable_testing()
 add_test(NAME matrix_benchmark COMMAND matrix_benchmark)
 add_test(NAME QR_decomposition_test COMMAND QR_decomposition_test)
 add_test(NAME QR_decision_test COMMAND QR_decision_test)
+add_test(NAME iter_method_versus COMMAND iter_method_versus)
 
 
 
