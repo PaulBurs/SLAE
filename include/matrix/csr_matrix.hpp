@@ -14,7 +14,7 @@ private:
 	std::vector<size_t> cols_;
 	std::vector<size_t> rows_ = {0};
 public:
-	csr_matrix(const dense_matrix<T>& matrix) : Matrix(get_size_x(), get_size_y())	{
+	csr_matrix(const dense_matrix<T>& matrix) : Matrix(matrix.get_size_x(), matrix.get_size_y())	{
 		for(int x = 0; x < get_size_x(); ++x)
 		{
 			rows_.push_back(rows_[x]);
@@ -23,7 +23,7 @@ public:
 					if (matrix(x, y) != 0)
 					{
 						values_.push_back(matrix(x, y));
-						cols_.push_back(x);
+						cols_.push_back(y);
 						rows_[x+1] += 1;
 					}
 				}
@@ -87,7 +87,7 @@ public:
     }
 
 
-	T operator() (size_t x, size_t y){
+	T operator() (size_t x, size_t y) const{
 		if (x >= get_size_x() || y >= get_size_y())
 			throw std::out_of_range("You are invalid: incorrect indexing!\n");
 
@@ -97,11 +97,11 @@ public:
 				return values_[i];
 		}
 
-		return 0;
+		return T(0);
 	}
 
 
-	T& operator() (size_t x, size_t y) const{
+	T& operator() (size_t x, size_t y) {
 		if (x >= get_size_x() || y >= get_size_y())
 			throw std::out_of_range("You are invalid: incorrect indexing!\n");
 
@@ -111,32 +111,52 @@ public:
 				return values_[i];
 		}
 
-		return 0;
+		return T(0);
 	}
 
 
 
 	std::vector<T> operator*(const std::vector<T>& vec) const{
-    if (vec.size() != rows_.size()-1)
+
+    if (vec.size() != this->get_size_x())
     {
         throw std::invalid_argument("You are invalid: the vectors must be the same size!");
     }
 
-    std::vector<T> result;
-    result.reserve(cols_.size());
+    std::vector<T> result(this->get_size_y(), T(0));
 
-    for(int y = 0; y < rows_.size(); ++y)
+    for(int y = 0; y < this->get_size_y(); ++y)
     {
         T sum = 0;
-        for(int x = rows_[y]; x < rows_[y+1]; ++x)
+        for(int x = this->rows_[y]; x < this->rows_[y+1]; ++x)
         {
-            sum += values_[y];
+            sum += this->values_[x] * vec[cols_[x]];
         }
-        result.push_back(sum);
+        result[y] = sum;
     }
 
     return result;
 	}
+
+	/*std::vector<T> operator*(const std::vector<T>& vec) const {
+    if (vec.size() != this->get_size_x()) {
+        throw std::invalid_argument("You are invalid: the vectors must be the same size!");
+    }
+
+
+    std::vector<T> result(this->get_size_y(), 0);
+
+    for (size_t i = 0; i < this->get_size_y()-1; ++i) {
+        const size_t row_start = rows_[i];
+        const size_t row_end = rows_[i + 1];
+
+        for (size_t j = row_start; j < row_end; ++j) {
+            result[i] += values_[j] * vec[cols_[j]];
+        }
+    }
+
+    return result;
+}*/
 
 };
 

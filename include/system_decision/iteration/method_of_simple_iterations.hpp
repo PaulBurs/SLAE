@@ -5,8 +5,9 @@
 #include "../include/suport/vector_operations.hpp"
 
 const double tau = 0.005;
-template <typename T>
-std::vector<T> method_of_simple_iterations(const dense_matrix<T>& A, const std::vector<T>& b,
+
+template <typename T, class M>
+std::vector<T> method_of_simple_iterations(const M& A, const std::vector<T>& b,
                                             const std::vector<T>& x_0, size_t iter, T epsilon){
     size_t MAX_ITER = 1000000;
     std::vector<T> x = x_0;
@@ -20,8 +21,9 @@ std::vector<T> method_of_simple_iterations(const dense_matrix<T>& A, const std::
     return x;
 }
 
-template <typename T>
-std::vector<T> method_of_simple_iterations_iter(const dense_matrix<T>& A, const std::vector<T>& b,
+
+template <typename T, class M>
+std::vector<T> method_of_simple_iterations_iter(const M& A, const std::vector<T>& b,
                                             const std::vector<T>& x_0, size_t iter){
 
     size_t MAX_ITER = 1000000;
@@ -33,8 +35,9 @@ std::vector<T> method_of_simple_iterations_iter(const dense_matrix<T>& A, const 
     return x;
 }
 
-template <typename T>
-std::vector<T> method_of_simple_iterations_epsilon(const dense_matrix<T>& A, const std::vector<T>& b,
+
+template <typename T, class M>
+std::vector<T> method_of_simple_iterations_epsilon(const M& A, const std::vector<T>& b,
                                             const std::vector<T>& x_0, T epsilon){
 
     size_t MAX_ITER = 1000000;

@@ -4,14 +4,15 @@
 #include <functional>
 #include <vector>
 #include "../include/matrix/dense_matrix.hpp"
+#include "../include/matrix/csr_matrix.hpp"
 #include "../include/system_decision/iteration/Gauss_Seidel_iteration_method.hpp"
 #include "../include/system_decision/iteration/Jacobi_iteration_method.hpp"
 #include "../include/system_decision/iteration/method_of_simple_iterations.hpp"
 #include "../include/system_decision/direct/QR_system_decision.hpp"
 
 
-template <typename T>
-void time_of_simple(const std::string& filename, const dense_matrix<T>& A, const std::vector<T>& b,
+template <typename T, class M>
+void time_of_simple(const std::string& filename, const M& A, const std::vector<T>& b,
                      const std::vector<T>& x_0, size_t iter, const std::vector<T>& x_true) {
 
 
@@ -31,8 +32,8 @@ void time_of_simple(const std::string& filename, const dense_matrix<T>& A, const
 }
 
 
-template <typename T>
-void time_of_Gauss_Seidel(const std::string& filename, const dense_matrix<T>& A, const std::vector<T>& b,
+template <typename T, class M>
+void time_of_Gauss_Seidel(const std::string& filename, const M& A, const std::vector<T>& b,
                      const std::vector<T>& x_0, size_t iter, const std::vector<T>& x_true) {
 
 
@@ -52,8 +53,8 @@ void time_of_Gauss_Seidel(const std::string& filename, const dense_matrix<T>& A,
 }
 
 
-template <typename T>
-void time_of_Jacobi(const std::string& filename, const dense_matrix<T>& A, const std::vector<T>& b,
+template <typename T, class M>
+void time_of_Jacobi(const std::string& filename, const M& A, const std::vector<T>& b,
                      const std::vector<T>& x_0, size_t iter, const std::vector<T>& x_true) {
 
 
@@ -72,8 +73,8 @@ void time_of_Jacobi(const std::string& filename, const dense_matrix<T>& A, const
     }
 }
 
-template <typename T>
-void time_of_QR(const std::string& filename, const dense_matrix<T>& A, const std::vector<T>& b, const std::vector<T>& x_true) {
+template <typename T, class M>
+void time_of_QR(const std::string& filename, const M& A, const std::vector<T>& b, const std::vector<T>& x_true) {
 
 
     auto start = std::chrono::high_resolution_clock::now();
@@ -111,7 +112,8 @@ int main() {
     std::vector<double> x = {0.63218, 1.09104, 1.50541, 0.87998, 1.15260, 0.91160};
 
     std::vector<double> x_0(6, 666);
-    dense_matrix A(6, 6, tmp);
+    dense_matrix B(6, 6, tmp);
+    csr_matrix A(B);
 
 
     ////////////////////////CLEAR//////////////////////////
@@ -148,6 +150,6 @@ int main() {
         time_of_Gauss_Seidel("Gauss_Seidel_iteration_method.txt", A, b, x_0, i, x);
         time_of_Jacobi("Jacobi_iteration_method.txt", A, b, x_0, i, x);
     }
-    time_of_QR("QR_decision.txt", A, b, x);
+    time_of_QR("QR_decision.txt", B, b, x);
     return 0;
 }

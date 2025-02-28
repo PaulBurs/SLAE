@@ -5,8 +5,8 @@
 #include "../include/suport/vector_operations.hpp"
 
 
-template <typename T>
-std::vector<T> Gauss_Seidel_iteration_method(const dense_matrix<T>& A, const std::vector<T>& b, const std::vector<T>& x_0, size_t iter, T epsilon){
+template <typename T, class M>
+std::vector<T> Gauss_Seidel_iteration_method(const M& A, const std::vector<T>& b, const std::vector<T>& x_0, size_t iter, T epsilon){
     size_t MAX_ITER = 1000000;
     size_t n = x_0.size();
     std::vector<T> x = x_0;
@@ -36,8 +36,9 @@ std::vector<T> Gauss_Seidel_iteration_method(const dense_matrix<T>& A, const std
     return x;
 }
 
-template <typename T>
-std::vector<T> Gauss_Seidel_iteration_method_iter(const dense_matrix<T>& A, const std::vector<T>& b, const std::vector<T>& x_0, size_t iter){
+
+template <typename T, class M>
+std::vector<T> Gauss_Seidel_iteration_method_iter(const M& A, const std::vector<T>& b, const std::vector<T>& x_0, size_t iter){
     size_t MAX_ITER = 1000000;
     size_t n = x_0.size();
     std::vector<T> x = x_0;
@@ -65,8 +66,9 @@ std::vector<T> Gauss_Seidel_iteration_method_iter(const dense_matrix<T>& A, cons
 }
 
 
-template <typename T>
-std::vector<T> Gauss_Seidel_iteration_method_epsilon(const dense_matrix<T>& A, const std::vector<T>& b, const std::vector<T>& x_0, T epsilon){
+
+template <typename T, class M>
+std::vector<T> Gauss_Seidel_iteration_method_epsilon(const M& A, const std::vector<T>& b, const std::vector<T>& x_0, T epsilon){
     size_t MAX_ITER = 1000000;
     size_t n = x_0.size();
     std::vector<T> x = x_0;
