@@ -3,7 +3,7 @@
 #include <utility>
 #include <algorithm>
 #include "../include/matrix/dense_matrix.hpp"
-#include "../include/system_decision/direct/QR_system_decision.hpp"
+#include "../include/system_solution/direct/QR_system_solution.hpp"
 
 const double EPSILON = 1e-8;
 

@@ -77,8 +77,33 @@ std::vector<T> operator*(const M& m, const std::vector<T>& a) {
 	return result;
 };
 
+template <typename T, typename M>
+std::vector<T> operator/(const std::vector<T>& a, const M& m) {
+	std::vector<T> result;
+	result.reserve(a.size());
+	for (int i = 0; i < a.size(); ++i)
+	{
+	    result.push_back(a[i] / m);
+	}
+
+	return result;
+};
+
+template <typename T, typename M>
+std::vector<T> operator/(const M& m, const std::vector<T>& a) {
+	std::vector<T> result;
+	result.reserve(a.size());
+	for (int i = 0; i < a.size(); ++i)
+	{
+	    result.push_back(a[i] / m);
+	}
+
+	return result;
+};
+
+
 template <typename T>
-T abs(const std::vector<T> a){
+T abs(const std::vector<T>& a){
     return std::sqrt(scalar(a,a));
 };
 
