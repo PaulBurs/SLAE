@@ -38,12 +38,12 @@ std::vector<T> method_of_simple_iterations_iter(const M& A, const std::vector<T>
 
 template <typename T, class M>
 std::vector<T> method_of_simple_iterations_epsilon(const M& A, const std::vector<T>& b,
-                                            const std::vector<T>& x_0, T epsilon){
+                                            const std::vector<T>& x_0, T epsilon, T tau1){
 
     size_t MAX_ITER = 1000000;
     std::vector<T> x = x_0;
     for (size_t i = 0; i < MAX_ITER; ++i){
-        std::vector<T> r = tau * (A * x - b);
+        std::vector<T> r = tau1 * (A * x - b);
         x = x - r;
         if (abs(r) < epsilon)
             break;

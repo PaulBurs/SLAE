@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "../include/matrix/dense_matrix.hpp"
+#include "../include/matrix/csr_matrix.hpp"
 #include "../include/suport/vector_operations.hpp"
 
 

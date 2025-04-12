@@ -4,7 +4,6 @@
 #include "../include/matrix/Matrix.hpp"
 
 template <typename T>
-
 class dense_matrix : public Matrix{
 private:
 	std::vector<T> matrix_;
@@ -137,6 +136,26 @@ public:
                     (*this)(x, y) = data(x, y);
         }
         return *this;
+    }
+
+    dense_matrix<T>& operator*(const T alpha) {
+        if(alpha != 1)
+        {
+            for(size_t x = 0; x < this->get_size_x(); ++x)
+                for(size_t y = 0; y < this->get_size_y(); ++y)
+                    (*this)(x, y) = alpha * (*this)(x, y);
+        }
+
+        return *this;
+    }
+
+    dense_matrix<T> operator*(const T alpha) const {
+        dense_matrix<T> m(this->get_size_x(), this->get_size_y());
+        for(size_t x = 0; x < this->get_size_x(); ++x)
+            for(size_t y = 0; y < this->get_size_y(); ++y)
+                m(x, y) = alpha * (*this)(x, y);
+
+        return m;
     }
 
     dense_matrix<T> operator*(const dense_matrix<T>& other) const {

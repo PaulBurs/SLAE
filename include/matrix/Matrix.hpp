@@ -2,8 +2,8 @@
 
 class Matrix {
 private:
-    size_t size_x_;
-    size_t size_y_;
+    size_t size_x_ = 0;
+    size_t size_y_ = 0;
 
 protected:
     Matrix(size_t size_x, size_t size_y){

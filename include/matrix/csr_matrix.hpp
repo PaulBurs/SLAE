@@ -5,15 +5,18 @@
 #include <map>
 #include "../include/matrix/Matrix.hpp"
 #include "../include/matrix/dense_matrix.hpp"
+#include "../include/suport/vector_operations.hpp"
 
 template <typename T>
 
 class csr_matrix : public Matrix{
 private:
-	std::vector<T> values_;
-	std::vector<size_t> cols_;
+	std::vector<T> values_ = {};
+	std::vector<size_t> cols_ = {};
 	std::vector<size_t> rows_ = {0};
 public:
+    csr_matrix();
+
 	csr_matrix(const dense_matrix<T>& matrix) : Matrix(matrix.get_size_x(), matrix.get_size_y())	{
 		for(int x = 0; x < get_size_x(); ++x)
 		{
@@ -30,6 +33,9 @@ public:
 		}
 
 	}
+
+	csr_matrix(size_t size_x, size_t size_y, std::vector<T> values, std::vector<size_t> cols, std::vector<size_t> rows) :
+	     Matrix(size_x, size_y), values_(values), cols_(cols), rows_(rows)	{	}
 
 
 	/*csr_matrix(size_t size_x, size_t size_y, const vector<vector<T>>& matrix)	{
@@ -87,6 +93,13 @@ public:
     }
 
 
+    static csr_matrix<T> identity(size_t size_n) {
+        dense_matrix<T> dense = dense_matrix<T>::identity(size_n);
+        csr_matrix<T> csr(dense);
+        return csr;
+    }
+
+
 	T operator() (size_t x, size_t y) const{
 		if (x >= get_size_x() || y >= get_size_y())
 			throw std::out_of_range("You are invalid: incorrect indexing!\n");
@@ -136,6 +149,17 @@ public:
     }
 
     return result;
+	}
+
+	csr_matrix<T> operator*(const T x) const{
+        std::vector<T> tmp = this->values_;
+	    csr_matrix<T> m(this->get_size_x(), this->get_size_y(), x * tmp, cols_, rows_);
+        return m;
+	}
+
+	csr_matrix<T> operator=(const csr_matrix<T> x){
+	    csr_matrix<T> m(this->get_size_x(), this->get_size_y(), values_, cols_, rows_);
+        return m;
 	}
 
 	/*std::vector<T> operator*(const std::vector<T>& vec) const {
