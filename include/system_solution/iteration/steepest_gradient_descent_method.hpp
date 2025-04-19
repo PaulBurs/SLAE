@@ -6,7 +6,7 @@
 #include "../include/suport/vector_operations.hpp"
 
 template <typename T, class M>
-std::vector<T> SGD(const M& A, const std::vector<T>& b, const std::vector<T>& x_0, size_t iter){
+std::vector<T> SGD(const M& A, const std::vector<T>& b, const std::vector<T>& x_0, size_t iter, T epsilon){
     std::vector<T> r = x_0;
     std::vector<T> x = x_0;
     for(size_t i = 0; i < iter; ++i){
@@ -14,7 +14,7 @@ std::vector<T> SGD(const M& A, const std::vector<T>& b, const std::vector<T>& x_
         std::vector<T> x_new = x - alpha * (A * x - b);
         r = x_new - x;
         x = x_new;
-        if (abs(r) < 1e-7)
+        if (abs(r) < epsilon)
             return x;
     }
     return x;

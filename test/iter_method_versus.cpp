@@ -13,6 +13,7 @@
 #include "../include/system_solution/direct/QR_system_solution.hpp"
 #include "../include/system_solution/iteration/symmetry_Gauss_Seidel_iteration_method.hpp"
 #include "../include/system_solution/iteration/steepest_gradient_descent_method.hpp"
+#include "../include/system_solution/iteration/symmetry_acceleration.hpp"
 
 
 template <typename T, class M>
@@ -178,7 +179,30 @@ void time_of_SGD(const std::string& filename, const M& A, const std::vector<T>& 
 
 
     auto start = std::chrono::high_resolution_clock::now();
-    std::vector<T> x_iter = SGD(A, b, x_0, iter);
+    std::vector<T> x_iter = SGD(A, b, x_0, iter, 1e-7);
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+
+
+    std::ofstream outfile(filename, std::ios_base::app);
+    if (outfile.is_open()) {
+        outfile << iter << " " << duration.count() << " " << abs(x_iter - x_true) << "\n";
+        outfile.close();
+    } else {
+        std::cerr << "Error opening file for writing!\n";
+    }
+}
+
+template <typename T, class M>
+void time_of_SA_GS(const std::string& filename, const M& A, const std::vector<T>& b,
+                     const std::vector<T>& x_0, size_t iter, const std::vector<T>& x_true) {
+
+
+    auto start = std::chrono::high_resolution_clock::now();
+    std::vector<T> x_iter = SA(A, b, x_0, iter, 1e-7,
+                              static_cast<std::vector<T>(*)(const M&, const std::vector<T>&,
+                                                            const std::vector<T>&, size_t, T)>(
+                                                                &Gauss_Seidel_iteration_method<T, M>));
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 
@@ -228,13 +252,28 @@ int main() {
     {0, 69, 0, 0, 3, 62, 0, 0, 0, 561}
 };
 
+    std::vector<std::vector<double>> tmp1 = {
+        {0.6, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05},
+        {0.05, 0.6, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05},
+        {0.05, 0.05, 0.6, 0.05, 0.05, 0.05, 0.05, 0.05},
+        {0.05, 0.05, 0.05, 0.6, 0.05, 0.05, 0.05, 0.05},
+        {0.05, 0.05, 0.05, 0.05, 0.6, 0.05, 0.05, 0.05},
+        {0.05, 0.05, 0.05, 0.05, 0.05, 0.6, 0.05, 0.05},
+        {0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.6, 0.05},
+        {0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.6}
+    };
     // Вектор правой части b
     std::vector<double> b = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+    std::vector<double> b1 = {1, 1, 1, 1, 1, 1, 1, 1};
 
     std::vector<double> x_0(10, 666);
+    std::vector<double> x_1(8, 666);
     dense_matrix B(10, 10, tmp);
+    dense_matrix B1(8, 8, tmp1);
     csr_matrix A(B);
+    csr_matrix A1(B1);
     std::vector<double> x = decision_system_with_QR(B, b);
+    std::vector<double> x1 = decision_system_with_QR(B1, b1);
 
 
     ////////////////////////CLEAR//////////////////////////
@@ -297,6 +336,34 @@ int main() {
         return 1;
     }
     outfile9.close();
+
+    std::ofstream outfile10("SA_GS.txt", std::ios::trunc);
+    if (!outfile10.is_open()) {
+        std::cerr << "Ошибка открытия файла!" << std::endl;
+        return 1;
+    }
+    outfile10.close();
+
+    std::ofstream outfile11("SA_J.txt", std::ios::trunc);
+    if (!outfile11.is_open()) {
+        std::cerr << "Ошибка открытия файла!" << std::endl;
+        return 1;
+    }
+    outfile11.close();
+
+    std::ofstream outfile12("SA_ChA.txt", std::ios::trunc);
+    if (!outfile12.is_open()) {
+        std::cerr << "Ошибка открытия файла!" << std::endl;
+        return 1;
+    }
+    outfile12.close();
+
+    std::ofstream outfile13("SA_SGD.txt", std::ios::trunc);
+    if (!outfile13.is_open()) {
+        std::cerr << "Ошибка открытия файла!" << std::endl;
+        return 1;
+    }
+    outfile13.close();
     ////////////////////////CLEAR//////////////////////////
 
 
@@ -308,6 +375,7 @@ int main() {
         time_of_SOR("successive_over_relaxation_method.txt", A, b, x_0, i, x);
         time_of_symmetry_Gauss_Seidel("symmetry_Gauss_Seidel_iteration_method.txt", A, b, x_0, i, x);
         time_of_SGD("steepest_gradient_descent_method.txt", A, b, x_0, i, x);
+        time_of_SA_GS("SA_GS.txt", A1, b1, x_1, i, x1);
     }
     for (int i = 2; i < 10000; i = i*2){
         time_of_Chebyshev("Chebyshev_acceleration.txt", A, b, x_0, i, x);
