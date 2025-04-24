@@ -1,3 +1,5 @@
+Я сделал ускорение симметризованных методов, но в одном месте вылетает core dump - я не знаю, как с этим бороться:(
+
 Сравнение csr и dense матриц.
 ![Иллюстрация к проекту](https://github.com/PaulBurs/SLAE/blob/main/test/dense_vs_csr_matrix.png)
 
