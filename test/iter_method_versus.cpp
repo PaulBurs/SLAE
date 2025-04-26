@@ -199,10 +199,87 @@ void time_of_SA_GS(const std::string& filename, const M& A, const std::vector<T>
 
 
     auto start = std::chrono::high_resolution_clock::now();
-    std::vector<T> x_iter = SA(A, b, x_0, iter, 1e-7,
-                              static_cast<std::vector<T>(*)(const M&, const std::vector<T>&,
-                                                            const std::vector<T>&, size_t, T)>(
-                                                                &Gauss_Seidel_iteration_method<T, M>));
+    auto gs_method = [](const M& A, const std::vector<T>& b,
+                        const std::vector<T>& x, size_t iter, T eps) {
+        return Gauss_Seidel_iteration_method<T, M>(A, b, x, iter, eps);
+    };
+
+    std::vector<T> x_iter = SA(A, b, x_0, iter, 1e-7, gs_method);
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+
+
+    std::ofstream outfile(filename, std::ios_base::app);
+    if (outfile.is_open()) {
+        outfile << iter << " " << duration.count() << " " << abs(x_iter - x_true) << "\n";
+        outfile.close();
+    } else {
+        std::cerr << "Error opening file for writing!\n";
+    }
+}
+
+template <typename T, class M>
+void time_of_SA_J(const std::string& filename, const M& A, const std::vector<T>& b,
+                     const std::vector<T>& x_0, size_t iter, const std::vector<T>& x_true) {
+
+
+    auto start = std::chrono::high_resolution_clock::now();
+    auto gs_method = [](const M& A, const std::vector<T>& b,
+                        const std::vector<T>& x, size_t iter, T eps) {
+        return Jacobi_iteration_method<T, M>(A, b, x, iter, eps);
+    };
+
+    std::vector<T> x_iter = SA(A, b, x_0, iter, 1e-7, gs_method);
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+
+
+    std::ofstream outfile(filename, std::ios_base::app);
+    if (outfile.is_open()) {
+        outfile << iter << " " << duration.count() << " " << abs(x_iter - x_true) << "\n";
+        outfile.close();
+    } else {
+        std::cerr << "Error opening file for writing!\n";
+    }
+}
+
+template <typename T, class M>
+void time_of_SA_ChA(const std::string& filename, const M& A, const std::vector<T>& b,
+                     const std::vector<T>& x_0, size_t iter, const std::vector<T>& x_true) {
+
+
+    auto start = std::chrono::high_resolution_clock::now();
+    auto gs_method = [](const M& A, const std::vector<T>& b,
+                        const std::vector<T>& x, size_t iter, T eps) {
+        return Chebyshev_acceleration<T, M>(A, b, x, iter, eps);
+    };
+
+    std::vector<T> x_iter = SA(A, b, x_0, iter, 1e-7, gs_method);
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+
+
+    std::ofstream outfile(filename, std::ios_base::app);
+    if (outfile.is_open()) {
+        outfile << iter << " " << duration.count() << " " << abs(x_iter - x_true) << "\n";
+        outfile.close();
+    } else {
+        std::cerr << "Error opening file for writing!\n";
+    }
+}
+
+template <typename T, class M>
+void time_of_SA_SGD(const std::string& filename, const M& A, const std::vector<T>& b,
+                     const std::vector<T>& x_0, size_t iter, const std::vector<T>& x_true) {
+
+
+    auto start = std::chrono::high_resolution_clock::now();
+    auto gs_method = [](const M& A, const std::vector<T>& b,
+                        const std::vector<T>& x, size_t iter, T eps) {
+        return SGD<T, M>(A, b, x, iter, eps);
+    };
+
+    std::vector<T> x_iter = SA(A, b, x_0, iter, 1e-7, gs_method);
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 
@@ -376,6 +453,9 @@ int main() {
         time_of_symmetry_Gauss_Seidel("symmetry_Gauss_Seidel_iteration_method.txt", A, b, x_0, i, x);
         time_of_SGD("steepest_gradient_descent_method.txt", A, b, x_0, i, x);
         time_of_SA_GS("SA_GS.txt", A1, b1, x_1, i, x1);
+        time_of_SA_J("SA_J.txt", A1, b1, x_1, i, x1);
+        time_of_SA_ChA("SA_ChA.txt", A1, b1, x_1, i, x1);
+        time_of_SA_SGD("SA_SGD.txt", A1, b1, x_1, i, x1);
     }
     for (int i = 2; i < 10000; i = i*2){
         time_of_Chebyshev("Chebyshev_acceleration.txt", A, b, x_0, i, x);

@@ -45,7 +45,7 @@ std::vector<T> Chebyshev_acceleration(const M& A, const std::vector<T>& bv,
         t[i] = t[i-1] * cos_pi_n - std::sqrt(1 - t[i-1]*t[i-1]) * sin_pi_n;
     }
     T a = estimation_lambda_max(A, x_0);
-    T b = estimation_lambda_min(A);
+    T b = estimation_lambda_min<T>(A);
 
     std::vector<T> stable_t(degree_iter);
     std::vector<size_t> iter_t = generate_Chebyshev_permutation(degree_iter);
