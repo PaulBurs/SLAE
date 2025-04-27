@@ -304,7 +304,7 @@ int main() {
 
     std::vector<double> x_0(100, 666);
     csr_matrix<double> A = generate_elliptic_csr<double>(10);
-    std::vector<double> x = SGD(A, b, x_0, 2000, 1e-15);
+    std::vector<double> x = Gauss_Seidel_iteration_method(A, b, x_0, 2000, 1e-15);
     //A.print();
 
 
@@ -397,7 +397,7 @@ int main() {
 
 
 
-    for (int i = 10; i < 5000; i = i * 1.3){
+    for (int i = 10; i < 5000; i = i * 1.1){
         time_of_GS("symmetry_of_GS.txt", A, b, x_0, i, x);
         time_of_J("symmetry_of_J.txt", A, b, x_0, i, x);
         time_of_SGD("symmetry_of_SGD.txt", A, b, x_0, i, x);
