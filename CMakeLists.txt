@@ -59,6 +59,10 @@ add_executable(iterations_method_versus
     test/iter_method_versus.cpp
 )
 
+add_executable(symmetry_versus
+    test/symmetry_versus.cpp
+)
+
 
 
 target_link_libraries(QR_decomposition_test
@@ -82,6 +86,7 @@ add_test(NAME matrix_benchmark COMMAND matrix_benchmark)
 add_test(NAME QR_decomposition_test COMMAND QR_decomposition_test)
 add_test(NAME QR_decision_test COMMAND QR_decision_test)
 add_test(NAME iter_method_versus COMMAND iter_method_versus)
+add_test(NAME symmetry_versus COMMAND symmetry_versus)
 
 
 
